@@ -1,8 +1,8 @@
 // Heavy 3D scenes for the homepage. Loaded only after the first user interaction (see home.js),
 // so three.js never blocks first paint / TBT.
 import * as THREE from 'three';
-import { createStage, buildPTZ, buildBullet, buildDome } from '../three/models.js';
-import { mountTileViewer } from '../three/tiles.js';
+import { createStage, buildPTZ, buildBullet, buildDome } from '../three/models.js?v=2611221351';
+import { mountTileViewer } from '../three/tiles.js?v=2611221351';
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const isMobile = matchMedia('(max-width: 960px)').matches;

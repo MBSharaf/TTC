@@ -1,6 +1,6 @@
-import { getProduct, products } from './data/products.js';
-import { renderLayout, initMotion, onFirstInteraction } from './layout.js';
-import { t, pf, specKey } from './i18n.js';
+import { getProduct, products } from './data/products.js?v=2611221351';
+import { renderLayout, initMotion, onFirstInteraction } from './layout.js?v=2611221351';
+import { t, pf, specKey } from './i18n.js?v=2611221351';
 
 renderLayout('products.html');
 const id = new URLSearchParams(location.search).get('id') || products[0].id;
@@ -31,7 +31,7 @@ document.head.append(ld);
 // ---- 3D viewer (lazy): drag to rotate 360°, pinch/scroll to zoom, preset angles ----
 async function start3D() {
   const [THREE, { OrbitControls }, { createStage, loadProductModel }] = await Promise.all([
-    import('three'), import('three/addons/controls/OrbitControls.js'), import('./three/models.js')]);
+    import('three'), import('three/addons/controls/OrbitControls.js'), import('./three/models.js?v=2611221351')]);
   const canvas = $('.viewer canvas');
   const { scene, camera, renderer } = createStage(canvas, { distance: matchMedia('(max-width: 960px)').matches ? 6.8 : 6, fov: 30 });
   const controls = new OrbitControls(camera, canvas);

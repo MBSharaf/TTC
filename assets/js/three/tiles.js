@@ -1,6 +1,6 @@
 // Category 3D models for the Solutions tiles + a shared tile viewer.
 import * as THREE from 'three';
-import { createStage, buildDome, buildPTZ, buildBullet } from './models.js';
+import { createStage, buildDome, buildPTZ, buildBullet } from './models.js?v=2611221351';
 
 const shell = (c = 0xf2f4f8) => new THREE.MeshPhysicalMaterial({ color: c, roughness: 0.3, metalness: 0.05, clearcoat: 1, clearcoatRoughness: 0.15 });
 const dark = () => new THREE.MeshPhysicalMaterial({ color: 0x161922, roughness: 0.32, metalness: 0.5, clearcoat: 0.6 });

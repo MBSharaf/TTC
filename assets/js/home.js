@@ -1,5 +1,5 @@
 // Homepage: everything here is lightweight. three.js + 3D scenes load on first interaction only.
-import { renderLayout, initMotion, splitWords, onFirstInteraction } from './layout.js';
+import { renderLayout, initMotion, splitWords, onFirstInteraction } from './layout.js?v=2611221351';
 
 renderLayout('index.html');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -128,4 +128,4 @@ initMotion();
 initStory();
 initCarousel();
 initServices();
-onFirstInteraction(() => import('./scenes/home3d.js').then((m) => m.start(story)));
+onFirstInteraction(() => import('./scenes/home3d.js?v=2611221351').then((m) => m.start(story)));

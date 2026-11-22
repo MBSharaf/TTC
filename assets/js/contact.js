@@ -1,6 +1,6 @@
 // Contact page: accessible client-side validation, loading state, success state, click-to-load map.
 // The submit currently simulates the request; swap `sendRequest` for a real POST when the backend exists.
-import { renderLayout, initMotion } from './layout.js';
+import { renderLayout, initMotion } from './layout.js?v=2611221351';
 
 renderLayout('contact.html');
 initMotion();

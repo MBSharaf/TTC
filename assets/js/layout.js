@@ -1,7 +1,7 @@
 // Shared header (with "Our Products" mega menu), mobile drawer, footer, animated WhatsApp button,
 // and dependency-free motion (IntersectionObserver + CSS). No GSAP / Lenis: keeps Lighthouse at ~100.
-import { categories } from './data/products.js';
-import { t, pf, altLangHref, root, isRTL } from './i18n.js';
+import { categories } from './data/products.js?v=2611221351';
+import { t, pf, altLangHref, root, isRTL } from './i18n.js?v=2611221351';
 
 const ico = {
   close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',

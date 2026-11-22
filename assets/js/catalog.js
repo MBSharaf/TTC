@@ -1,7 +1,7 @@
-import { products } from './data/products.js';
-import { renderLayout, initMotion, onFirstInteraction } from './layout.js';
+import { products } from './data/products.js?v=2611221351';
+import { renderLayout, initMotion, onFirstInteraction } from './layout.js?v=2611221351';
 let mountCardViewer = null; // loaded lazily with three.js
-import { t, pf } from './i18n.js';
+import { t, pf } from './i18n.js?v=2611221351';
 
 renderLayout('products.html');
 
@@ -77,4 +77,4 @@ chips(document.querySelector('[data-chips="brand"]'), brands, 'brand');
 let current = [];
 function mount3D() { grid.querySelectorAll('canvas').forEach((cv, i) => mountCardViewer(cv, current[i])); document.documentElement.classList.add('is-3d'); }
 render(); updateRfq(); initMotion();
-onFirstInteraction(() => import('./three/models.js').then((m) => { mountCardViewer = m.mountCardViewer; mount3D(); }));
+onFirstInteraction(() => import('./three/models.js?v=2611221351').then((m) => { mountCardViewer = m.mountCardViewer; mount3D(); }));
