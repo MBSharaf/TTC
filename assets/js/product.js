@@ -33,7 +33,7 @@ async function start3D() {
   const [THREE, { OrbitControls }, { createStage, loadProductModel }] = await Promise.all([
     import('three'), import('three/addons/controls/OrbitControls.js'), import('./three/models.js')]);
   const canvas = $('.viewer canvas');
-  const { scene, camera, renderer } = createStage(canvas, { distance: matchMedia('(max-width: 960px)').matches ? 7.6 : 6, fov: 30 });
+  const { scene, camera, renderer } = createStage(canvas, { distance: matchMedia('(max-width: 960px)').matches ? 6.8 : 6, fov: 30 });
   const controls = new OrbitControls(camera, canvas);
   Object.assign(controls, { enableDamping: true, dampingFactor: 0.06, enablePan: false, minDistance: 3.2, maxDistance: 11, autoRotate: true, autoRotateSpeed: 1.2 });
   controls.addEventListener('start', () => (controls.autoRotate = false));
@@ -57,7 +57,7 @@ async function start3D() {
   })();
   document.documentElement.classList.add('is-3d');
 }
-onFirstInteraction(start3D);
+start3D();
 
 // Quote button
 const rfq = new Set(JSON.parse(localStorage.getItem('ttc-rfq') || '[]'));

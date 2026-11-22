@@ -51,7 +51,7 @@ export function renderLayout(current = 'index.html') {
       <div class="header__actions">
         <a class="lang" href="${other}" lang="${otherLang}" hreflang="${otherLang}">${t.switchLang}</a>
         <a class="btn btn--primary btn--sm" href="contact.html">${t.quote}</a>
-        <button class="burger" aria-label="${t.openMenu}" aria-expanded="false" aria-controls="drawer"><span></span><span></span></button>
+        <button class="burger" aria-label="${t.openMenu}" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
       </div>
     </div>
   </header>
@@ -208,4 +208,7 @@ export function onFirstInteraction(fn) {
   const evs = ['pointermove', 'pointerdown', 'touchstart', 'wheel', 'keydown'];
   const go = () => { if (done) return; done = true; evs.forEach((e) => removeEventListener(e, go, true)); fn(); };
   evs.forEach((e) => addEventListener(e, go, { capture: true, passive: true, once: true }));
+  // don't leave the 3D waiting forever if the visitor just reads: start shortly after load anyway
+  const later = () => setTimeout(go, 3000);
+  document.readyState === 'complete' ? later() : addEventListener('load', later, { once: true });
 }

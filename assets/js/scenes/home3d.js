@@ -106,7 +106,7 @@ function initHero() {
 /* ================= STORY: scroll-pinned product walkthrough ================= */
 function initStory(story) {
   const canvas = document.querySelector('.story__stage canvas');
-  const { scene, camera, renderer } = createStage(canvas, { distance: isMobile ? 7.4 : 6.4 });
+  const { scene, camera, renderer } = createStage(canvas, { distance: isMobile ? 8.6 : 6.4 });
   const models = [buildDome(), buildBullet(), buildPTZ()];
   models.forEach((m, i) => { m.visible = i === 0; scene.add(m); });
   // Glowing turntable under the product

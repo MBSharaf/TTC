@@ -79,31 +79,56 @@ export function buildPTZ() {
 
 export const builders = { bullet: buildBullet, dome: buildDome, ptz: buildPTZ };
 
-/** Shared stage: renderer + env + lights. */
-export function createStage(canvas, { alpha = true, fov = 32, distance = 6 } = {}) {
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  const scene = new THREE.Scene();
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+/* One WebGL context for the whole page. Phones allow only a few contexts and drop the oldest
+   (the hero) when more are created, so every view renders here and is copied into its own 2D canvas. */
+const MOBILE = matchMedia('(max-width: 960px)').matches;
+const DPR = Math.min(devicePixelRatio || 1, MOBILE ? 1.5 : 2);
+let shared;
+function getShared() {
+  if (shared) return shared;
+  const gl = new THREE.WebGLRenderer({ canvas: document.createElement('canvas'), antialias: !MOBILE, alpha: true, powerPreference: 'high-performance' });
+  gl.setPixelRatio(1);
+  gl.toneMapping = THREE.ACESFilmicToneMapping; gl.toneMappingExposure = 1.05;
+  gl.outputColorSpace = THREE.SRGBColorSpace;
+  gl.setClearColor(0x000000, 0);
+  const pmrem = new THREE.PMREMGenerator(gl);
+  const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture; pmrem.dispose();
+  shared = { gl, env };
+  return shared;
+}
+
+/** Stage: scene + camera + lights, drawn through the shared renderer into `canvas`. */
+export function createStage(canvas, { fov = 32, distance = 6 } = {}) {
+  const { gl, env } = getShared();
+  const ctx = canvas.getContext('2d');
+  const scene = new THREE.Scene(); scene.environment = env;
   const camera = new THREE.PerspectiveCamera(fov, 1, 0.1, 100);
   camera.position.set(0, 0.4, distance);
   const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(3, 5, 4); scene.add(key);
   const rimV = new THREE.PointLight(0x6a4bff, 30, 20); rimV.position.set(-4, 1, -2); scene.add(rimV);
   const rimT = new THREE.PointLight(0x3fe8da, 22, 20); rimT.position.set(4, -1, -2); scene.add(rimT);
   scene.add(new THREE.AmbientLight(0xffffff, 0.25));
-
+  let w = 0, h = 0;
   const resize = () => {
-    const w = canvas.clientWidth, h = canvas.clientHeight;
-    if (!w || !h) return;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / h; camera.updateProjectionMatrix();
+    const cw = canvas.clientWidth, ch = canvas.clientHeight;
+    if (!cw || !ch) return;
+    w = Math.round(cw * DPR); h = Math.round(ch * DPR);
+    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+    camera.aspect = cw / ch; camera.updateProjectionMatrix();
   };
   resize();
   new ResizeObserver(resize).observe(canvas);
+  const renderer = {
+    domElement: canvas,
+    render(sc, cam) {
+      if (!w || !h) return;
+      const el = gl.domElement;
+      if (el.width < w || el.height < h) gl.setSize(Math.max(el.width, w), Math.max(el.height, h), false);
+      gl.setViewport(0, el.height - h, w, h); gl.setScissor(0, el.height - h, w, h); gl.setScissorTest(true);
+      gl.clear(); gl.render(sc, cam);
+      ctx.clearRect(0, 0, w, h); ctx.drawImage(el, 0, 0, w, h, 0, 0, w, h);
+    },
+  };
   return { THREE, renderer, scene, camera, resize };
 }
 
@@ -134,6 +159,7 @@ export function mountCardViewer(canvas, product) {
   card?.addEventListener('pointerleave', () => (hover = false));
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const tick = () => {
+    if (!canvas.isConnected) return; // card removed by a filter change: stop this loop
     requestAnimationFrame(tick);
     if (!visible || !model) return;
     t += hover ? 0.03 : 0.006;

@@ -870,3 +870,19 @@ html[dir="rtl"] .field label{transform-origin:right top}
 
 /* sticky fix: overflow-x:hidden on body creates a scroll container and breaks position:sticky */
 html,body{overflow-x:clip}
+
+/* ---------- Menu button (v2): three staggered lines, brand gradient ---------- */
+.burger{width:46px;height:46px;border-radius:14px;background:#fff;box-shadow:0 0 0 1px rgba(82,56,178,.14),0 6px 18px -8px rgba(82,56,178,.45);
+  display:none;flex-direction:column;align-items:flex-end;justify-content:center;gap:5px;padding:0 13px;transition:box-shadow .25s,transform .2s}
+.burger span,.burger span+span{display:block;height:2px;margin:0;border-radius:2px;background:linear-gradient(90deg,#5238B2,#4DD0D0);transition:width .3s var(--ease-out)}
+.burger span:nth-child(1){width:20px}.burger span:nth-child(2){width:13px}.burger span:nth-child(3){width:17px}
+.burger:hover span,.burger:focus-visible span{width:20px}
+.burger:active{transform:scale(.94)}
+html[dir="rtl"] .burger{align-items:flex-start}
+html[dir="rtl"] .burger span{background:linear-gradient(270deg,#5238B2,#4DD0D0)}
+@media (max-width:960px){.burger{display:flex}}
+@media (max-width:960px){
+  .story__pin{grid-template-rows:40svh auto;align-content:start;padding-top:calc(var(--header-h) + 8px);gap:4px}
+  .story__stage{max-height:40svh;height:40svh}
+  .story__big{font-size:84px}
+}
